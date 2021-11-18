@@ -1,0 +1,35 @@
+version: '3'
+services:
+  web:
+    depends_on:
+      - database
+    build: .
+    image: alyssontkd/ambiente-glpi-padrao
+    container_name: 'glpi-padrao'
+    ports:
+     - "8003:80"
+     - "4443:443"
+    volumes:
+     - /var/www/docker/glpi-docker/glpi-app:/var/www/html/glpi
+     - /var/www/docker/glpi-docker/apache2/logs/glpi-app:/var/log/apache2
+    environment:
+     - APPLICATION_ENV=development
+    links:
+     - database
+
+  database:
+   image: mysql:5.7
+   container_name: 'mysql-glpi-padrao'
+   command: mysqld --sql_mode=""
+   ports:
+        - "3307:3306"
+   volumes:
+        - /var/www/docker/glpi-docker/database/mysql/conf.d:/etc/mysql/conf.d
+        - /var/www/docker/glpi-docker/database/mysql/mysql.conf.d:/etc/mysql/mysql.conf.d
+        - /var/www/docker/glpi-docker/database/mysql/data:/var/lib/mysql
+        - /var/www/docker/glpi-docker/database/mysql/log:/var/log/
+   environment:
+        MYSQL_ROOT_PASSWORD: 12345678
+        MYSQL_USER: usr_aplicacao
+        MYSQL_PASSWORD: 12345678
+        MYSQL_DATABASE: glpi
