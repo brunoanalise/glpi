@@ -8,32 +8,32 @@ USER root
 
 #Copiando os arquivos do HOST para a IMAGEM
 COPY ./src /tmp/src
-#RUN cp -av /tmp/src/actions/apt-get/sources.list /etc/apt/
+#RUN cp -av /tmp/src/actions/yum/sources.list /etc/apt/
 
-RUN apt-get update
+RUN yum update
 
 RUN echo "[ ***** ***** ***** ] - Installing each item in new command to use cache and avoid download again ***** ***** ***** "
-RUN apt-get install -y apt-utils
-RUN apt-get install -y libfreetype6-dev
-RUN apt-get install -y libjpeg62-turbo-dev
-RUN apt-get install -y libcurl4-gnutls-dev
-RUN apt-get install -y libxml2-dev
-RUN apt-get install -y freetds-dev
-RUN apt-get install -y git
-RUN apt-get install -y wget
-RUN apt-get install -y mysql-client
+RUN yum install -y apt-utils
+RUN yum install -y libfreetype6-dev
+RUN yum install -y libjpeg62-turbo-dev
+RUN yum install -y libcurl4-gnutls-dev
+RUN yum install -y libxml2-dev
+RUN yum install -y freetds-dev
+RUN yum install -y git
+RUN yum install -y wget
+RUN yum install -y mysql-client
 
 # LDAP requirements
-RUN apt-get install libldap2-dev -y && \
+RUN yum install libldap2-dev -y && \
     docker-php-ext-configure ldap --with-libdir=lib/x86_64-linux-gnu && \
     docker-php-ext-install -j$(nproc) ldap
 
 # IMAP requirements
-RUN apt-get install -y openssl
-RUN apt-get install -y libc-client2007e-dev
-RUN apt-get install -y libkrb5-dev
+RUN yum install -y openssl
+RUN yum install -y libc-client2007e-dev
+RUN yum install -y libkrb5-dev
 
-RUN apt-get install libldap2-dev -y && \
+RUN yum install libldap2-dev -y && \
     docker-php-ext-configure imap --with-kerberos --with-imap-ssl && \
     docker-php-ext-install -j$(nproc) imap
 
@@ -42,13 +42,13 @@ RUN docker-php-ext-install -j$(nproc) bcmath && \
     docker-php-ext-enable bcmath
 
 #vim is usefull for debug container in interactive shell
-RUN apt-get install -y vim
-RUN apt-get install -y telnet
-RUN apt-get install -y zip
-RUN apt-get install -y unzip
-RUN apt-get install -y bzip2
-RUN apt-get install -y unrar-free
-RUN apt-get install -y ca-certificates
+RUN yum install -y vim
+RUN yum install -y telnet
+RUN yum install -y zip
+RUN yum install -y unzip
+RUN yum install -y bzip2
+RUN yum install -y unrar-free
+RUN yum install -y ca-certificates
 
 RUN echo "[ ***** ***** ***** ] - Installing PHP Dependencies ***** ***** ***** "
 
@@ -57,7 +57,7 @@ RUN docker-php-ext-install gd
 RUN docker-php-ext-install soap
 
 # opcache
-RUN apt-get update && apt-get install -y zlib1g-dev libicu-dev libpq-dev \
+RUN yum update && yum install -y zlib1g-dev libicu-dev libpq-dev \
     && docker-php-ext-install opcache \
     && docker-php-ext-install intl \
     && docker-php-ext-install mbstring \
@@ -71,7 +71,7 @@ RUN apt-get update && apt-get install -y zlib1g-dev libicu-dev libpq-dev \
 RUN docker-php-ext-install xmlrpc
 
 RUN docker-php-ext-install calendar
-RUN apt-get update && apt-get install -y libpq-dev && docker-php-ext-install pdo
+RUN yum update && yum install -y libpq-dev && docker-php-ext-install pdo
 
 #Configurando extenções especificas do Mysql
 RUN docker-php-ext-configure mysqli --with-libdir=/lib/x86_64-linux-gnu && docker-php-ext-install mysqli
@@ -80,10 +80,10 @@ RUN docker-php-ext-configure pdo_mysql --with-libdir=/lib/x86_64-linux-gnu && do
 RUN chmod +x -R /tmp/src/
 
 #Atualiza os pacotes da imagem
-RUN apt-get upgrade -y
+RUN yum upgrade -y
 
 # Cleanup all downloaded packages
-RUN apt-get -y autoclean && apt-get -y autoremove && apt-get -y clean && rm -rf /var/lib/apt/lists/* && apt-get update
+RUN yum -y autoclean && yum -y autoremove && yum -y clean && rm -rf /var/lib/apt/lists/* && yum update
 
 #Similar ao comando CD do terminal. Permite setar o diretório que o trabalho ocorrerá (Na Imagem).
 WORKDIR /var/www/html/
