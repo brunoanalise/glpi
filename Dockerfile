@@ -7,7 +7,7 @@ RUN echo "[ ***** ***** ***** ] - Copying files to Image ***** ***** ***** "
 USER root
 
 #Copiando os arquivos do HOST para a IMAGEM
-COPY ./src /tmp/src
+COPY root/src /tmp/src
 #RUN cp -av /tmp/src/actions/yum/sources.list /etc/apt/
 
 RUN yum update
